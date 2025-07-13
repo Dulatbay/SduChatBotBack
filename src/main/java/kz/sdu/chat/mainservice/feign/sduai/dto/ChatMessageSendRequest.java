@@ -7,6 +7,5 @@ import lombok.Data;
 @Builder
 public class ChatMessageSendRequest {
     private String question;
-    private String user_id;
-    private String language;
+    private String chat_id;
 }

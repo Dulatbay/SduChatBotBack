@@ -49,9 +49,8 @@ public class MessageServiceImpl implements MessageService {
         var chat = this.findChatById(chatId, user);
 
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
-                .language(Utils.getCurrentLanguage().name().toLowerCase())
                 .question(messageCreateRequest.getContent())
-                .user_id(chat.getUniqueUUID())
+                .chat_id(chat.getUniqueUUID())
                 .build());
         var aiMessageEntity = messageMapper.toEntity(ans, chat);
         var messageResponseFromAi = messageMapper.toResponse(aiMessageEntity);
@@ -71,9 +70,8 @@ public class MessageServiceImpl implements MessageService {
     public SendMessageResponse createChatAndSendMessage(MessageCreateRequest messageCreateRequest, User user) {
         var chat = createChat(messageCreateRequest, user);
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
-                .language(Utils.getCurrentLanguage().name().toLowerCase())
                 .question(messageCreateRequest.getContent())
-                .user_id(chat.getUniqueUUID())
+                .chat_id(chat.getUniqueUUID())
                 .build());
         var aiMessageEntity = messageMapper.toEntity(ans, chat);
         var messageResponseFromAi = messageMapper.toResponse(aiMessageEntity);
