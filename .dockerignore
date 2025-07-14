@@ -31,3 +31,7 @@ README.md
 
 application-dev.properties
 application-dev.yml 
+
+
+### Elastic Beanstalk ###
+.elasticbeanstalk/

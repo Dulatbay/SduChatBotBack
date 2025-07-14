@@ -3,7 +3,7 @@ GOOGLE_CLIENT_SECRET: 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
 GOOGLE_REDIRECT_URI: http://localhost:5173/login-callback
 
 SDU_AI_API_KEY: soon
-SDU_AI_API_URL: https://oati7iiuojtzwhmp3mm4mrekdu0aiuqb.lambda-url.eu-central-1.on.aws/
+SDU_AI_API_URL: https://bvtoi4h2yxsm4irflom4r7qnru0krroe.lambda-url.eu-central-1.on.aws/
 
 spring:
   datasource:
