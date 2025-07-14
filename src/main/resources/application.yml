@@ -1,6 +1,6 @@
 GOOGLE_CLIENT_ID: 211043075627-go3joan2ll0scbt3e43qm2tlcpk3jpdd.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET: 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
-GOOGLE_REDIRECT_URI: http://localhost:5173/login-callback
+GOOGLE_REDIRECT_URI: https://main.d36vvvf4ztyfx9.amplifyapp.com/login-callback
 
 SDU_AI_API_KEY: soon
 SDU_AI_API_URL: https://bvtoi4h2yxsm4irflom4r7qnru0krroe.lambda-url.eu-central-1.on.aws/
