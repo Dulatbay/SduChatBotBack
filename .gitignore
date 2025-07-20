@@ -38,3 +38,4 @@ out/
 
 ### Elastic Beanstalk ###
 .elasticbeanstalk/
+sdu-chat-backend-deployment.zip
