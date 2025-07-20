@@ -24,7 +24,10 @@ public class CustomCorsFilter extends OncePerRequestFilter {
         "http://localhost:5173",
         "https://main.d36vvvf4ztyfx9.amplifyapp.com",
         "https://*.elasticbeanstalk.com",
-        "https://18.244.146.111:443"
+        "https://18.244.146.111:443",
+        "http://localhost",
+        "http://3.120.37.156",
+        "http://chat.sdu.edu.kz"
     );
 
     @Override
