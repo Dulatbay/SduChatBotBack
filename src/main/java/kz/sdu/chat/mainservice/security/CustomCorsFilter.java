@@ -17,8 +17,15 @@ import java.util.List;
 @Component
 public class CustomCorsFilter extends OncePerRequestFilter {
 
-    private final List<String> allowedOrigins = Arrays.asList("http://localhost:3000", "http://localhost:3001", "http://192.168.0.37:3000", "http://localhost:5173");
-
+    private final List<String> allowedOrigins = Arrays.asList(
+        "http://localhost:3000", 
+        "http://localhost:3001", 
+        "http://192.168.0.37:3000", 
+        "http://localhost:5173",
+        "https://main.d36vvvf4ztyfx9.amplifyapp.com",
+        "https://*.elasticbeanstalk.com",
+        "https://18.244.146.111:443"
+    );
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

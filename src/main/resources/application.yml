@@ -11,8 +11,8 @@ spring:
     hikari:
       auto-commit: false
     url: jdbc:postgresql://${DATABASE_DOMAIN:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:sduchat}
-    username: ${DATABASE_USERNAME:k_app}
-    password: ${DATABASE_PASSWORD:123}
+    username: ${DATABASE_USERNAME:k_app} #akhan
+    password: ${DATABASE_PASSWORD:123} #adilet-password
     driver-class-name: org.postgresql.Driver
   jpa:
     show_sql: true
