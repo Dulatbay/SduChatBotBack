@@ -20,11 +20,10 @@ services:
       timeout: 5s
       retries: 5
 
+
   sdu-chat-backend:
     container_name: sduchat-backend
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: batyrbaev0520/sdu-chat-bot-back:1.0.0
     ports:
       - "8080:8080"
     environment:
