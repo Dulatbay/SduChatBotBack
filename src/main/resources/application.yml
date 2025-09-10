@@ -1,9 +1,9 @@
 GOOGLE_CLIENT_ID: 211043075627-go3joan2ll0scbt3e43qm2tlcpk3jpdd.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET: 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
 
-GOOGLE_REDIRECT_URI: http://localhost:5173/login-callback
+# GOOGLE_REDIRECT_URI: http://localhost:5173/login-callback
 # GOOGLE_REDIRECT_URI: http://localhost/login-callback
-# GOOGLE_REDIRECT_URI: http://chat.sdu.edu.kz/login-callback
+GOOGLE_REDIRECT_URI: http://chat.sdu.edu.kz/login-callback
 # GOOGLE_REDIRECT_URI: https://main.d36vvvf4ztyfx9.amplifyapp.com/login-callback
 # GOOGLE_REDIRECT_URI: https://dev.dsfyww8pm8b26.amplifyapp.com/login-callback
 # GOOGLE_REDIRECT_URI: http://3.73.120.186:5173/login-callback
