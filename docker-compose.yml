@@ -23,7 +23,7 @@ services:
 
   sdu-chat-backend:
     container_name: sduchat-backend
-    image: batyrbaev0520/sdu-chat-bot-back:1.0.0
+    image: batyrbaev0520/sdu-chat-back:prod-1.0.3
     ports:
       - "8080:8080"
     environment:

@@ -23,11 +23,13 @@ public class CustomCorsFilter extends OncePerRequestFilter {
         "http://192.168.0.37:3000", 
         "http://localhost:5173",
         "https://main.d36vvvf4ztyfx9.amplifyapp.com",
-        "https://*.elasticbeanstalk.com",
         "https://18.244.146.111:443",
         "http://localhost",
         "http://3.120.37.156",
-        "http://chat.sdu.edu.kz"
+        "https://chat.sdu.edu.kz",
+        "https://dev.dsfyww8pm8b26.amplifyapp.com",
+        "http://3.73.120.186:5173",
+        "https://chat-back.sdu.edu.kz"
     );
 
     @Override
