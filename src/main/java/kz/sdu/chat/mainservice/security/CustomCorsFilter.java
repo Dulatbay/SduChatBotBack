@@ -29,7 +29,8 @@ public class CustomCorsFilter extends OncePerRequestFilter {
         "http://3.120.37.156",
         "http://chat.sdu.edu.kz",
         "https://dev.dsfyww8pm8b26.amplifyapp.com",
-        "http://3.73.120.186:5173"
+        "http://3.73.120.186:5173",
+        "https://chat-back.sdu.edu.kz"
     );
 
     @Override
