@@ -7,9 +7,9 @@ import kz.sdu.chat.mainservice.rest.dto.response.ChatResponse;
 import kz.sdu.chat.mainservice.rest.dto.base.PaginatedResponse;
 import kz.sdu.chat.mainservice.rest.dto.base.PaginationParams;
 import kz.sdu.chat.mainservice.rest.dto.response.MessageResponse;
-import kz.sdu.chat.mainservice.rest.dto.response.SendMessageResponse;
 import kz.sdu.chat.mainservice.services.ChatService;
 import kz.sdu.chat.mainservice.services.MessageService;
+import kz.sdu.chat.mainservice.services.MessageTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +26,7 @@ import java.util.Optional;
 public class ChatController {
     private final ChatService chatService;
     private final MessageService messageService;
+    private final MessageTokenService messageTokenService;
 
     @GetMapping("/connected")
     public ResponseEntity<Boolean> getConnectedChats() {
@@ -72,16 +73,32 @@ public class ChatController {
         return ResponseEntity.ok(new PaginatedResponse<>(messages));
     }
 
+    // SendMessageResponse
     @PostMapping("/{chatId}/messages")
-    public ResponseEntity<SendMessageResponse> sendMessage(@PathVariable long chatId, @RequestBody MessageCreateRequest messageCreateRequest) {
+    public ResponseEntity<?> sendMessage(@PathVariable long chatId, @RequestBody MessageCreateRequest messageCreateRequest) {
         var user = Utils.getCurrentUser();
         log.info("Sending message to chat with ID: {}", chatId);
+
+        boolean check = messageTokenService.CheckMessageToken(user);
+
+        if(!check) {
+            return ResponseEntity.badRequest().body("You’ve reached your message limit.");
+        }
+
         return ResponseEntity.ok(messageService.sendMessage(chatId, messageCreateRequest, user));
     }
 
+    // SendMessageResponse
     @PostMapping("/send-message")
-    public ResponseEntity<SendMessageResponse> sendMessageToChat(@RequestBody MessageCreateRequest messageCreateRequest) {
+    public ResponseEntity<?> sendMessageToChat(@RequestBody MessageCreateRequest messageCreateRequest) {
         var user = Utils.getCurrentUser();
+
+        boolean check = messageTokenService.CheckMessageToken(user);
+
+        if(!check) {
+            return ResponseEntity.badRequest().body("You’ve reached your message limit.");
+        }
+
         log.info("Sending message to chat with content: {}", messageCreateRequest.getContent());
         return ResponseEntity.ok(messageService.createChatAndSendMessage(messageCreateRequest, user));
     }

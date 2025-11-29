@@ -14,6 +14,7 @@ import kz.sdu.chat.mainservice.rest.dto.request.MessageCreateRequest;
 import kz.sdu.chat.mainservice.rest.dto.response.MessageResponse;
 import kz.sdu.chat.mainservice.rest.dto.response.SendMessageResponse;
 import kz.sdu.chat.mainservice.services.MessageService;
+import kz.sdu.chat.mainservice.services.MessageTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +33,7 @@ public class MessageServiceImpl implements MessageService {
     private final MessageMapper messageMapper;
     private final ChatRepository chatRepository;
     private final SduAiAPI sduAiAPI;
+    private final MessageTokenService messageTokenService;
 
 
     @Override
@@ -59,6 +61,8 @@ public class MessageServiceImpl implements MessageService {
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
         messageRepository.saveAll(messages);
 
+        messageTokenService.AddtokenToUser(user);
+
         return SendMessageResponse.builder()
                 .chatId(chatId)
                 .messageResponse(messageResponseFromAi)
@@ -80,6 +84,8 @@ public class MessageServiceImpl implements MessageService {
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
 
         messageRepository.saveAll(messages);
+
+        messageTokenService.AddtokenToUser(user);
 
         return SendMessageResponse.builder()
                 .chatId(chat.getId())
