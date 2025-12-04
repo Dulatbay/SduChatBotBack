@@ -2,12 +2,14 @@ package kz.sdu.chat.mainservice.services.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kz.sdu.chat.mainservice.config.ApplicationProperties;
 import kz.sdu.chat.mainservice.entities.Role;
 import kz.sdu.chat.mainservice.entities.Token;
 import kz.sdu.chat.mainservice.entities.User;
 import kz.sdu.chat.mainservice.feign.google.GoogleAPI;
 import kz.sdu.chat.mainservice.repositories.TokenRepository;
 import kz.sdu.chat.mainservice.repositories.UserRepository;
+import kz.sdu.chat.mainservice.rest.dto.request.LoginDevRequest;
 import kz.sdu.chat.mainservice.rest.dto.response.LoginResponse;
 import kz.sdu.chat.mainservice.security.JwtService;
 import kz.sdu.chat.mainservice.services.AuthService;
@@ -33,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final TokenRepository tokenRepository;
+    private final ApplicationProperties applicationProperties;
 
     @Override
     public LoginResponse processGrantCode(String code) {
@@ -67,6 +70,33 @@ public class AuthServiceImpl implements AuthService {
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
+    private void validateSecurityKey(String securityKey) {
+        if(!applicationProperties.getSecurityKey().equals(securityKey)) {
+            throw new IllegalArgumentException("Invalid security key");
+        }
+    }
+
+    @Override
+    public LoginResponse loginDev(LoginDevRequest loginDevRequest) {
+        validateSecurityKey(loginDevRequest.getSecurityKey());
+
+        User foundUser = userRepository.findByEmail(loginDevRequest.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (!passwordEncoder.matches(loginDevRequest.getPassword(), foundUser.getPassword())) {
+            throw new IllegalArgumentException("Invalid credentials");
+        }
+
+        String refreshToken = jwtService.generateRefreshToken(foundUser);
+        String token = jwtService.generateToken(foundUser);
+        saveUserToken(foundUser, refreshToken);
+
+        return LoginResponse.builder()
+                .accessToken(token)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
     private void revokeCurrentToken(String refreshToken) {
         var token = tokenRepository.findByToken(refreshToken)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
@@ -97,7 +127,7 @@ public class AuthServiceImpl implements AuthService {
         tokenRepository.save(token);
     }
 
-    public User registerUser(String firstName, String lastName, String email, String password) {
+    private User registerUser(String firstName, String lastName, String email, String password) {
         User user = new User();
         user.setEnabled(true);
         user.setRole(Role.USER);

@@ -16,4 +16,8 @@ public class ApplicationProperties {
 
     private String sduAiApiKey;
     private String sduAiApiUrl;
+
+    private String securityKey;
+    private String testUser;
+    private String testUserPassword;
 }

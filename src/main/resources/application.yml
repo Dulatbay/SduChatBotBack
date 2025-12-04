@@ -8,6 +8,10 @@ GOOGLE_REDIRECT_URI: http://chat.sdu.edu.kz/login-callback
 SDU_AI_API_KEY: soon
 SDU_AI_API_URL: https://bvtoi4h2yxsm4irflom4r7qnru0krroe.lambda-url.eu-central-1.on.aws/
 
+SECURITY_KEY: k_app_123456
+TEST_USER: test_user@mail.ru
+TEST_USER_PASSWORD: test_user_121212
+
 spring:
   datasource:
     hikari:
