@@ -9,6 +9,10 @@ COPY settings.gradle.kts .
 
 RUN chmod +x ./gradlew
 
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends dos2unix curl \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY src src
 
 RUN ./gradlew build -x test
