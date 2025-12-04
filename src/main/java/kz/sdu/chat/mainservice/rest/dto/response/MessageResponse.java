@@ -1,6 +1,5 @@
 package kz.sdu.chat.mainservice.rest.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -14,6 +13,4 @@ public class MessageResponse {
     private int number;
     private int version = 1;
     private String createdDate;
-    private Double costUsd;
-    private String topic;
 }
