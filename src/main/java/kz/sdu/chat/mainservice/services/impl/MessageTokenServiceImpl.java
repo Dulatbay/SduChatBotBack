@@ -68,7 +68,7 @@ public class MessageTokenServiceImpl implements MessageTokenService {
 
             log.info("Duration in days for user {}: {}", token.getUserId(), duration.toDays());
 
-            if(duration.toMinutes() >= 1){
+            if(duration.toDays() >= 30){
                 token.setSpentCost(0.0);
                 token.setUpdateDate(LocalDateTime.now());
                 userTokensRepository.save(token);
