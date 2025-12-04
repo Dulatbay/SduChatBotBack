@@ -52,7 +52,7 @@ public class MessageServiceImpl implements MessageService {
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
                 .question(messageCreateRequest.getContent())
                 .chat_id(chat.getUniqueUUID())
-                .isNeedTopic(true)
+                .is_need_topic(true)
                 .build());
         var aiMessageEntity = messageMapper.toEntity(ans, chat);
         var messageResponseFromAi = messageMapper.toResponse(aiMessageEntity);
@@ -61,7 +61,7 @@ public class MessageServiceImpl implements MessageService {
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
         messageRepository.saveAll(messages);
 
-        messageTokenService.addtokenToUser(user, ans.getUsageMetadata().getCostUsd());
+        messageTokenService.addtokenToUser(user, ans.getUsage_metadata().getCostUsd());
 
         return SendMessageResponse.builder()
                 .chatId(chatId)
@@ -76,7 +76,7 @@ public class MessageServiceImpl implements MessageService {
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
                 .question(messageCreateRequest.getContent())
                 .chat_id(chat.getUniqueUUID())
-                .isNeedTopic(true)
+                .is_need_topic(true)
                 .build());
         var aiMessageEntity = messageMapper.toEntity(ans, chat);
         var messageResponseFromAi = messageMapper.toResponse(aiMessageEntity);
@@ -86,7 +86,7 @@ public class MessageServiceImpl implements MessageService {
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
 
         messageRepository.saveAll(messages);
-        messageTokenService.addtokenToUser(user, ans.getUsageMetadata().getCostUsd());
+        messageTokenService.addtokenToUser(user, ans.getUsage_metadata().getCostUsd());
 
         return SendMessageResponse.builder()
                 .chatId(chat.getId())

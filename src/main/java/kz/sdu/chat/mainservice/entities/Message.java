@@ -33,8 +33,7 @@ public class Message extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> sources = new ArrayList<>();
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    private UsageMetadataResponse usageMetadata;
+    private Double costUsd;
 
     private String topic;
 

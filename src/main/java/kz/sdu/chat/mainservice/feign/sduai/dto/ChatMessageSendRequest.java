@@ -9,6 +9,5 @@ import lombok.Data;
 public class ChatMessageSendRequest {
     private String question;
     private String chat_id;
-    @JsonProperty("is_need_topic")
-    private Boolean isNeedTopic;
+    private Boolean is_need_topic;
 }

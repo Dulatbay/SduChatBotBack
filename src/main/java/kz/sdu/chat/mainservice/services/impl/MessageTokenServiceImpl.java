@@ -27,8 +27,7 @@ public class MessageTokenServiceImpl implements MessageTokenService {
         UserTokens usertokens = userTokensRepository.findAllByUserId(user.getId());
         if(usertokens == null) {
             createUserToken(user);
-        }
-        if(usertokens.getSpentCost() > ChatTokenLimit){
+        }else if(usertokens.getSpentCost() > ChatTokenLimit){
             throw new IllegalArgumentException("You’ve reached your message limit.");
         }
     }
@@ -70,10 +69,8 @@ public class MessageTokenServiceImpl implements MessageTokenService {
             if(duration.toDays() >= 30){
                 token.setSpentCost(0.0);
                 token.setUpdateDate(LocalDateTime.now());
-                userTokensRepository.save(token);
             }
         }
+        userTokensRepository.saveAll(all);
     }
-
-
 }

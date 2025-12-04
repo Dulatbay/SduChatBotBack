@@ -11,7 +11,6 @@ public class ChatAnswerResponse {
     private String question;
     private String answer;
     private List<String> sources;
-    @JsonProperty("usage_metadata")
-    private UsageMetadataResponse usageMetadata;
+    private UsageMetadataResponse usage_metadata;
     private String topic;
 }

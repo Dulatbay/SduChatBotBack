@@ -14,7 +14,6 @@ public class MessageResponse {
     private int number;
     private int version = 1;
     private String createdDate;
-    @JsonProperty("usage_metadata")
-    private UsageMetadataResponse usageMetadata;
+    private Double costUsd;
     private String topic;
 }
