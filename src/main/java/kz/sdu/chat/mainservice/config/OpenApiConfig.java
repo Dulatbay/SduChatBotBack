@@ -36,13 +36,12 @@ import java.util.List;
         ),
         servers = {
                 @Server(
-                        description = "Local ENV",
-                        url = "http://localhost:8080/api"),
-
-                @Server(
                         description = "PROD ENV",
-                        url = "https://soon/api"
-                )
+                        url = "https://chat-back.sdu.edu.kz/api"
+                ),
+                @Server(
+                        description = "Local ENV",
+                        url = "http://localhost:8080/api")
         },
         security = {
                 @SecurityRequirement(
