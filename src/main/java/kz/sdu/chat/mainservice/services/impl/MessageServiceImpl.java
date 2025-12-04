@@ -1,6 +1,5 @@
 package kz.sdu.chat.mainservice.services.impl;
 
-import kz.sdu.chat.mainservice.constants.Utils;
 import kz.sdu.chat.mainservice.entities.Chat;
 import kz.sdu.chat.mainservice.entities.User;
 import kz.sdu.chat.mainservice.exceptions.DbNotFoundException;
@@ -53,6 +52,7 @@ public class MessageServiceImpl implements MessageService {
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
                 .question(messageCreateRequest.getContent())
                 .chat_id(chat.getUniqueUUID())
+                .isNeedTopic(true)
                 .build());
         var aiMessageEntity = messageMapper.toEntity(ans, chat);
         var messageResponseFromAi = messageMapper.toResponse(aiMessageEntity);
@@ -61,7 +61,7 @@ public class MessageServiceImpl implements MessageService {
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
         messageRepository.saveAll(messages);
 
-        messageTokenService.AddtokenToUser(user);
+        messageTokenService.AddtokenToUser(user, ans.getUsageMetadata().getCostUsd());
 
         return SendMessageResponse.builder()
                 .chatId(chatId)
@@ -72,20 +72,21 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public SendMessageResponse createChatAndSendMessage(MessageCreateRequest messageCreateRequest, User user) {
-        var chat = createChat(messageCreateRequest, user);
+        var chat = createChat(user);
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
                 .question(messageCreateRequest.getContent())
                 .chat_id(chat.getUniqueUUID())
+                .isNeedTopic(true)
                 .build());
         var aiMessageEntity = messageMapper.toEntity(ans, chat);
         var messageResponseFromAi = messageMapper.toResponse(aiMessageEntity);
         messageResponseFromAi.setCreatedDate(LocalDateTime.now().toString());
+        setChatTitle(chat.getId(), ans.getTopic());
 
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
 
         messageRepository.saveAll(messages);
-
-        messageTokenService.AddtokenToUser(user);
+        messageTokenService.AddtokenToUser(user, ans.getUsageMetadata().getCostUsd());
 
         return SendMessageResponse.builder()
                 .chatId(chat.getId())
@@ -94,11 +95,17 @@ public class MessageServiceImpl implements MessageService {
                 .build();
     }
 
-    private Chat createChat(MessageCreateRequest messageCreateRequest, User user) {
+    private Chat createChat(User user) {
         var chat = new Chat();
-        chat.setTitle(messageCreateRequest.getContent());
+        chat.setTitle("");
         chat.setOwner(user);
         return chatRepository.save(chat);
+    }
+
+    private void setChatTitle(Long id, String title){
+        var chat = chatRepository.findById(id).orElseThrow(() -> new DbNotFoundException(HttpStatus.NOT_FOUND, "Chat not found", ""));
+        chat.setTitle(title);
+        chatRepository.save(chat);
     }
 
     private Chat findChatById(long chatId, User user) {

@@ -28,5 +28,7 @@ public interface MessageMapper {
     @Mapping(target = "isUser", expression = "java(false)")
     @Mapping(target = "content", source = "chatAnswerResponse.answer")
     @Mapping(target = "sources", source = "chatAnswerResponse.sources")
+    @Mapping(target = "usageMetadata", source = "chatAnswerResponse.usageMetadata")
+    @Mapping(target = "topic", source = "chatAnswerResponse.topic")
     Message toEntity(ChatAnswerResponse chatAnswerResponse, Chat chat);
 }

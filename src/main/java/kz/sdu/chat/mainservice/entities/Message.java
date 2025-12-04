@@ -2,6 +2,7 @@ package kz.sdu.chat.mainservice.entities;
 
 import jakarta.persistence.*;
 import kz.sdu.chat.mainservice.entities.base.BaseEntity;
+import kz.sdu.chat.mainservice.rest.dto.response.UsageMetadataResponse;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
@@ -31,6 +32,11 @@ public class Message extends BaseEntity {
 
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> sources = new ArrayList<>();
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    private UsageMetadataResponse usageMetadata;
+
+    private String topic;
 
     @ManyToOne
     @JoinColumn(name = "chat_id")

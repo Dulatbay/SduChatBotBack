@@ -20,7 +20,7 @@ public class UserTokens {
 
     private Long userId;
 
-    private Long spentCost;
+    private Double spentCost;
 
     private LocalDateTime updateDate;
 
