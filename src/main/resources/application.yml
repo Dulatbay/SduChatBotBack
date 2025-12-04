@@ -8,15 +8,11 @@ GOOGLE_REDIRECT_URI: http://chat.sdu.edu.kz/login-callback
 SDU_AI_API_KEY: soon
 SDU_AI_API_URL: https://bvtoi4h2yxsm4irflom4r7qnru0krroe.lambda-url.eu-central-1.on.aws/
 
-SECURITY_KEY: k_app_123456
-TEST_USER: test_user@mail.ru
-TEST_USER_PASSWORD: test_user_121212
-
 spring:
   datasource:
     hikari:
       auto-commit: false
-    url: jdbc:postgresql://${DATABASE_DOMAIN:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:sduchat}
+    url: jdbc:postgresql://${DATABASE_DOMAIN:63.178.189.113}:${DATABASE_PORT:5432}/${DATABASE_NAME:sduchat}
     username: ${DATABASE_USERNAME:k_app} #akhan
     password: ${DATABASE_PASSWORD:123} #adilet-password
     driver-class-name: org.postgresql.Driver
@@ -35,9 +31,7 @@ application:
   security:
     jwt:
       secret-key: ${JWT_SECRET_KEY:97f78a289512d4d655cf98a4472a0bae9320c6c583de879297154b2175cf150ccae35397c92322a7dee767c7268cb7f4723f197a3a65a17bd5f942a7481cc56dcfcbc9bbb0e511af6d7a0625e75d450fb33b7ebcf84faeebcfed97234b813bee70b9bdc866aad235f22886bab66039a941d4a447af585284a57496d96d0d578ac0c31784daf6781eb685e7bd0638f922dc6b27f49b61b26ea5635ae53d1c34e65a05375a50b6e5b43c8c617c4b6d325ddce0272e09771cdf3007fb5998f8f9928166fdd87f577df970195edd86bbf8ccb10e2393d0bf6f2b705302ca8bab200b93960e17d5ba1114aac76bb9800d16bf2983ccb42351dea9a02f9b998e8ab83e}
-      expiration: 31536000000  # 1 year
-#      expiration: 21600000 # 6 hours
+      expiration: 21600000 # 6 hours
       #      expiration: 10000 # 10 seconds
       refresh-token:
-#        expiration: 604800000 # 1 week
-        expiration: 31536000000  # 1 year
+        expiration: 604800000 # 1 week
