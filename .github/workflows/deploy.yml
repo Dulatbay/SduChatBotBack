@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker image
-        run: docker build . --tag qqanly/sdu-chat-backendend:latest
+        run: docker build . --tag qqanly/sdu-chat-backend:latest
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u qqanly --password-stdin
