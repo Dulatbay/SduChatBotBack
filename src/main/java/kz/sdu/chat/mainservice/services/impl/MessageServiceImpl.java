@@ -61,7 +61,7 @@ public class MessageServiceImpl implements MessageService {
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
         messageRepository.saveAll(messages);
 
-        messageTokenService.AddtokenToUser(user, ans.getUsageMetadata().getCostUsd());
+        messageTokenService.addtokenToUser(user, ans.getUsageMetadata().getCostUsd());
 
         return SendMessageResponse.builder()
                 .chatId(chatId)
@@ -86,7 +86,7 @@ public class MessageServiceImpl implements MessageService {
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
 
         messageRepository.saveAll(messages);
-        messageTokenService.AddtokenToUser(user, ans.getUsageMetadata().getCostUsd());
+        messageTokenService.addtokenToUser(user, ans.getUsageMetadata().getCostUsd());
 
         return SendMessageResponse.builder()
                 .chatId(chat.getId())

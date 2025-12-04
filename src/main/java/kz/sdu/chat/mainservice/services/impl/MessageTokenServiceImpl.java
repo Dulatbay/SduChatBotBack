@@ -23,24 +23,23 @@ public class MessageTokenServiceImpl implements MessageTokenService {
     private final UserTokensRepository userTokensRepository;
 
     @Override
-    public boolean CheckMessageToken(User user){
+    public void checkMessageToken(User user){
         UserTokens usertokens = userTokensRepository.findAllByUserId(user.getId());
         if(usertokens == null) {
-            CreateUserToken(user);
+            createUserToken(user);
         }
         if(usertokens.getSpentCost() > ChatTokenLimit){
-            return false;
+            throw new IllegalArgumentException("You’ve reached your message limit.");
         }
-        return true;
     }
 
 
     @Override
-    public void AddtokenToUser(User user, Double cost) {
+    public void addtokenToUser(User user, Double cost) {
         UserTokens usertokens = userTokensRepository.findAllByUserId(user.getId());
 
         if(usertokens == null){
-            CreateUserToken(user);
+            createUserToken(user);
         }
 
         usertokens.setSpentCost(usertokens.getSpentCost() + cost);
@@ -48,7 +47,7 @@ public class MessageTokenServiceImpl implements MessageTokenService {
     }
 
     @Override
-    public void CreateUserToken(User user) {
+    public void createUserToken(User user) {
         UserTokens newUsertokens = new UserTokens();
         newUsertokens.setUserId(user.getId());
         newUsertokens.setSpentCost(0.0);
@@ -58,7 +57,7 @@ public class MessageTokenServiceImpl implements MessageTokenService {
 
     @Scheduled(fixedRate = 86_400_000)
     @Override
-    public void CheckForDateUserToken() {
+    public void checkForDateUserToken() {
         List<UserTokens> all = userTokensRepository.findAll();
 
         for (UserTokens token : all) {
