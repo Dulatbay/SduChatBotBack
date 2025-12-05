@@ -17,6 +17,7 @@ import kz.sdu.chat.mainservice.rest.dto.response.MessageResponse;
 import kz.sdu.chat.mainservice.rest.dto.response.SendMessageResponse;
 import kz.sdu.chat.mainservice.services.ChatService;
 import kz.sdu.chat.mainservice.services.MessageService;
+import kz.sdu.chat.mainservice.services.MessageTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -36,6 +37,7 @@ import java.util.Optional;
 public class ChatController {
     private final ChatService chatService;
     private final MessageService messageService;
+    private final MessageTokenService messageTokenService;
 
     @GetMapping("/connected")
     @Operation(
@@ -187,6 +189,9 @@ public class ChatController {
             @RequestBody MessageCreateRequest messageCreateRequest) {
         var user = Utils.getCurrentUser();
         log.info("Sending message to chat with ID: {}", chatId);
+
+        messageTokenService.checkMessageToken(user);
+
         return ResponseEntity.ok(messageService.sendMessage(chatId, messageCreateRequest, user));
     }
 
@@ -207,6 +212,9 @@ public class ChatController {
     )
     public ResponseEntity<SendMessageResponse> sendMessageToChat(@RequestBody MessageCreateRequest messageCreateRequest) {
         var user = Utils.getCurrentUser();
+
+        messageTokenService.checkMessageToken(user);
+
         log.info("Sending message to chat with content: {}", messageCreateRequest.getContent());
         return ResponseEntity.ok(messageService.createChatAndSendMessage(messageCreateRequest, user));
     }
