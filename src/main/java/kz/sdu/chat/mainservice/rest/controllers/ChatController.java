@@ -189,9 +189,6 @@ public class ChatController {
             @RequestBody MessageCreateRequest messageCreateRequest) {
         var user = Utils.getCurrentUser();
         log.info("Sending message to chat with ID: {}", chatId);
-
-        messageTokenService.checkMessageToken(user);
-
         return ResponseEntity.ok(messageService.sendMessage(chatId, messageCreateRequest, user));
     }
 
@@ -212,9 +209,6 @@ public class ChatController {
     )
     public ResponseEntity<SendMessageResponse> sendMessageToChat(@RequestBody MessageCreateRequest messageCreateRequest) {
         var user = Utils.getCurrentUser();
-
-        messageTokenService.checkMessageToken(user);
-
         log.info("Sending message to chat with content: {}", messageCreateRequest.getContent());
         return ResponseEntity.ok(messageService.createChatAndSendMessage(messageCreateRequest, user));
     }
