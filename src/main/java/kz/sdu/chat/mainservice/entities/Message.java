@@ -35,8 +35,6 @@ public class Message extends BaseEntity {
 
     private Double costUsd;
 
-    private String topic;
-
     @ManyToOne
     @JoinColumn(name = "chat_id")
     private Chat chat;
