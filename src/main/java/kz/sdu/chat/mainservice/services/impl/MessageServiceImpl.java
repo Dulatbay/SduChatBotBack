@@ -47,6 +47,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public SendMessageResponse sendMessage(long chatId, MessageCreateRequest messageCreateRequest, User user) {
+        messageTokenService.checkMessageToken(user);
+        
         var chat = this.findChatById(chatId, user);
 
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
@@ -72,6 +74,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public SendMessageResponse createChatAndSendMessage(MessageCreateRequest messageCreateRequest, User user) {
+        messageTokenService.checkMessageToken(user);
+        
         var chat = createChat(user);
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
                 .question(messageCreateRequest.getContent())
