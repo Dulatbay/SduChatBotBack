@@ -17,6 +17,7 @@ import kz.sdu.chat.mainservice.rest.dto.response.MessageResponse;
 import kz.sdu.chat.mainservice.rest.dto.response.SendMessageResponse;
 import kz.sdu.chat.mainservice.services.ChatService;
 import kz.sdu.chat.mainservice.services.MessageService;
+import kz.sdu.chat.mainservice.services.MessageTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -36,6 +37,7 @@ import java.util.Optional;
 public class ChatController {
     private final ChatService chatService;
     private final MessageService messageService;
+    private final MessageTokenService messageTokenService;
 
     @GetMapping("/connected")
     @Operation(

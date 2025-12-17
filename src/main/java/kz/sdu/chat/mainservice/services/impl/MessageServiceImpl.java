@@ -1,6 +1,5 @@
 package kz.sdu.chat.mainservice.services.impl;
 
-import kz.sdu.chat.mainservice.constants.Utils;
 import kz.sdu.chat.mainservice.entities.Chat;
 import kz.sdu.chat.mainservice.entities.User;
 import kz.sdu.chat.mainservice.exceptions.DbNotFoundException;
@@ -14,6 +13,7 @@ import kz.sdu.chat.mainservice.rest.dto.request.MessageCreateRequest;
 import kz.sdu.chat.mainservice.rest.dto.response.MessageResponse;
 import kz.sdu.chat.mainservice.rest.dto.response.SendMessageResponse;
 import kz.sdu.chat.mainservice.services.MessageService;
+import kz.sdu.chat.mainservice.services.MessageTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +32,7 @@ public class MessageServiceImpl implements MessageService {
     private final MessageMapper messageMapper;
     private final ChatRepository chatRepository;
     private final SduAiAPI sduAiAPI;
+    private final MessageTokenService messageTokenService;
 
 
     @Override
@@ -46,11 +47,14 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public SendMessageResponse sendMessage(long chatId, MessageCreateRequest messageCreateRequest, User user) {
+        messageTokenService.checkMessageToken(user);
+        
         var chat = this.findChatById(chatId, user);
 
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
                 .question(messageCreateRequest.getContent())
                 .chat_id(chat.getUniqueUUID())
+                .is_need_topic(true)
                 .build());
         var aiMessageEntity = messageMapper.toEntity(ans, chat);
         var messageResponseFromAi = messageMapper.toResponse(aiMessageEntity);
@@ -58,6 +62,8 @@ public class MessageServiceImpl implements MessageService {
 
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
         messageRepository.saveAll(messages);
+
+        messageTokenService.addtokenToUser(user, ans.getUsage_metadata().getCostUsd());
 
         return SendMessageResponse.builder()
                 .chatId(chatId)
@@ -68,18 +74,23 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public SendMessageResponse createChatAndSendMessage(MessageCreateRequest messageCreateRequest, User user) {
-        var chat = createChat(messageCreateRequest, user);
+        messageTokenService.checkMessageToken(user);
+        
+        var chat = createChat(user);
         var ans = sduAiAPI.sendMessage(ChatMessageSendRequest.builder()
                 .question(messageCreateRequest.getContent())
                 .chat_id(chat.getUniqueUUID())
+                .is_need_topic(true)
                 .build());
         var aiMessageEntity = messageMapper.toEntity(ans, chat);
         var messageResponseFromAi = messageMapper.toResponse(aiMessageEntity);
         messageResponseFromAi.setCreatedDate(LocalDateTime.now().toString());
+        setChatTitle(chat.getId(), ans.getTopic());
 
         var messages = List.of(messageMapper.toEntity(messageCreateRequest, chat, user), aiMessageEntity);
 
         messageRepository.saveAll(messages);
+        messageTokenService.addtokenToUser(user, ans.getUsage_metadata().getCostUsd());
 
         return SendMessageResponse.builder()
                 .chatId(chat.getId())
@@ -88,11 +99,17 @@ public class MessageServiceImpl implements MessageService {
                 .build();
     }
 
-    private Chat createChat(MessageCreateRequest messageCreateRequest, User user) {
+    private Chat createChat(User user) {
         var chat = new Chat();
-        chat.setTitle(messageCreateRequest.getContent());
+        chat.setTitle("");
         chat.setOwner(user);
         return chatRepository.save(chat);
+    }
+
+    private void setChatTitle(Long id, String title){
+        var chat = chatRepository.findById(id).orElseThrow(() -> new DbNotFoundException(HttpStatus.NOT_FOUND, "Chat not found", ""));
+        chat.setTitle(title);
+        chatRepository.save(chat);
     }
 
     private Chat findChatById(long chatId, User user) {

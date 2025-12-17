@@ -4,7 +4,6 @@ import kz.sdu.chat.mainservice.config.ApplicationProperties;
 import kz.sdu.chat.mainservice.entities.Role;
 import kz.sdu.chat.mainservice.entities.User;
 import kz.sdu.chat.mainservice.repositories.UserRepository;
-import kz.sdu.chat.mainservice.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
