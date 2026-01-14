@@ -41,3 +41,23 @@ application:
       refresh-token:
 #        expiration: 604800000 # 1 week
         expiration: 31536000000  # 1 year
+
+
+management:
+  endpoint:
+    metrics:
+      access: read_only
+    prometheus:
+      access: read_only
+    health:
+      show-details: always
+    beans:
+      access: read_only
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
