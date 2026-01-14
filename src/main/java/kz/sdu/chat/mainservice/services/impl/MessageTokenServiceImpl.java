@@ -1,5 +1,6 @@
 package kz.sdu.chat.mainservice.services.impl;
 
+import kz.sdu.chat.mainservice.config.ApplicationProperties;
 import kz.sdu.chat.mainservice.entities.User;
 import kz.sdu.chat.mainservice.entities.UserTokens;
 import kz.sdu.chat.mainservice.repositories.UserTokensRepository;
@@ -13,7 +14,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static kz.sdu.chat.mainservice.constants.ValueConstants.ChatTokenLimit;
+import static kz.sdu.chat.mainservice.constants.ValueConstants.CHAT_TOKEN_LIMIT;
 
 @Service
 @RequiredArgsConstructor
@@ -21,13 +22,17 @@ import static kz.sdu.chat.mainservice.constants.ValueConstants.ChatTokenLimit;
 public class MessageTokenServiceImpl implements MessageTokenService {
 
     private final UserTokensRepository userTokensRepository;
+    private final ApplicationProperties applicationProperties;
 
     @Override
     public void checkMessageToken(User user){
         UserTokens usertokens = userTokensRepository.findAllByUserId(user.getId());
+
+        if(user.getEmail().equals(applicationProperties.getTestUser())) return;
+
         if(usertokens == null) {
             createUserToken(user);
-        }else if(usertokens.getSpentCost() > ChatTokenLimit){
+        }else if(usertokens.getSpentCost() > CHAT_TOKEN_LIMIT){
             throw new IllegalArgumentException("You’ve reached your message limit.");
         }
     }
