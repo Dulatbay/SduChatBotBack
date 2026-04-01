@@ -94,6 +94,7 @@ public class ChatController {
         return ResponseEntity.ok(chatResponse);
     }
 
+    @Deprecated
     @PostMapping
     @Operation(
             summary = "Create an empty chat",
